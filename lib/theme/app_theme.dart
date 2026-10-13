@@ -31,6 +31,7 @@ class AppTheme {
   static const Color artsColor = Color(0xFF9333EA);
   static const Color sportsColor = Color(0xFFEA580C);
   static const Color careerColor = Color(0xFF0D9488);
+  static const Color academicColor = Color(0xFF059669);
 
   /// Helper to get category metadata (color, icon, container color)
   static CategoryMeta getCategoryMeta(String category, bool isDark) {
@@ -66,6 +67,14 @@ class AppTheme {
               ? const Color(0xFF042F2E).withValues(alpha: 0.5)
               : const Color(0xFFF0FDFA),
           icon: Icons.business_center_rounded,
+        );
+      case 'academic':
+        return CategoryMeta(
+          color: isDark ? const Color(0xFF34D399) : academicColor,
+          backgroundColor: isDark
+              ? const Color(0xFF064E3B).withValues(alpha: 0.5)
+              : const Color(0xFFECFDF5),
+          icon: Icons.school_rounded,
         );
       default:
         return CategoryMeta(
