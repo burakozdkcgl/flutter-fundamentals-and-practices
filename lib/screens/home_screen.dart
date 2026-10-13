@@ -7,8 +7,20 @@ import '../widgets/empty_state.dart';
 import '../widgets/event_card.dart';
 import 'event_details_screen.dart';
 
+/// Sorting options available for campus events.
+enum EventSortOption {
+  dateAsc('Upcoming Date', Icons.event_available_rounded),
+  alphabetical('Alphabetical (A - Z)', Icons.sort_by_alpha_rounded),
+  capacityDesc('Most Spots Left', Icons.event_seat_rounded),
+  occupancyDesc('Most Popular', Icons.trending_up_rounded);
+
+  final String label;
+  final IconData icon;
+  const EventSortOption(this.label, this.icon);
+}
+
 /// Main screen featuring Explore, Favorites, and My Events tabs
-/// with integrated search, category filtering, theme toggle, and capacity management.
+/// with integrated search, category filtering, theme toggle, sorting, and capacity management.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,10 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // Navigation tab index: 0 = Explore, 1 = Favorites, 2 = My Events
   int _currentTabIndex = 0;
 
-  // Search and filter state
+  // Search, filter, and sort state
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String _selectedCategory = 'All';
+  EventSortOption _selectedSort = EventSortOption.dateAsc;
 
   // Available categories: "All" plus at least three distinct categories
   final List<String> _categories = [
@@ -62,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _searchController.clear();
       _searchQuery = '';
       _selectedCategory = 'All';
+      _selectedSort = EventSortOption.dateAsc;
     });
   }
 
@@ -204,7 +218,127 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Filters events based on tab, title search, and selected category.
+  void _showSortBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
+        final isDark = Theme.of(sheetContext).brightness == Brightness.dark;
+        return Material(
+          color: isDark ? AppTheme.darkSurface : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                width: 1,
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppTheme.darkBorder : const Color(0xFFCBD5E1),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Sort Events By',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
+                      ),
+                    ),
+                    if (_selectedSort != EventSortOption.dateAsc)
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _selectedSort = EventSortOption.dateAsc;
+                          });
+                          Navigator.pop(sheetContext);
+                        },
+                        child: const Text('Reset'),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                ...EventSortOption.values.map((option) {
+                  final isSelected = _selectedSort == option;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: isSelected
+                            ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
+                            : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                        width: 1,
+                      ),
+                    ),
+                    child: Material(
+                      color: isSelected
+                          ? (isDark
+                              ? const Color(0xFF381014)
+                              : const Color(0xFFFFE4E6))
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(14),
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        dense: true,
+                        leading: Icon(
+                          option.icon,
+                          color: isSelected
+                              ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
+                              : (isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary),
+                        ),
+                        title: Text(
+                          option.label,
+                          style: TextStyle(
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            color: isSelected
+                                ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
+                                : (isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A)),
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? Icon(
+                                Icons.check_circle_rounded,
+                                size: 18,
+                                color: isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy,
+                              )
+                            : null,
+                        onTap: () {
+                          setState(() {
+                            _selectedSort = option;
+                          });
+                          Navigator.pop(sheetContext);
+                        },
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Filters events based on tab, title search, selected category, and sort option.
   List<Event> _getFilteredEvents() {
     // 1. Base list according to selected tab
     List<Event> baseList;
@@ -213,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (_currentTabIndex == 2) {
       baseList = _allEvents.where((e) => e.isJoined).toList();
     } else {
-      baseList = _allEvents;
+      baseList = List<Event>.from(_allEvents);
     }
 
     // 2. Apply category filter
@@ -229,6 +363,22 @@ class _HomeScreenState extends State<HomeScreen> {
       }).toList();
     }
 
+    // 4. Apply sorting
+    switch (_selectedSort) {
+      case EventSortOption.dateAsc:
+        baseList.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+        break;
+      case EventSortOption.alphabetical:
+        baseList.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+        break;
+      case EventSortOption.capacityDesc:
+        baseList.sort((a, b) => b.availablePlaces.compareTo(a.availablePlaces));
+        break;
+      case EventSortOption.occupancyDesc:
+        baseList.sort((a, b) => a.availablePlaces.compareTo(b.availablePlaces));
+        break;
+    }
+
     return baseList;
   }
 
@@ -242,7 +392,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final totalJoined = _allEvents.where((e) => e.isJoined).length;
 
     final isSearchingOrFiltering =
-        _searchQuery.trim().isNotEmpty || _selectedCategory != 'All';
+        _searchQuery.trim().isNotEmpty ||
+        _selectedCategory != 'All' ||
+        _selectedSort != EventSortOption.dateAsc;
 
     // Title according to active tab
     String tabTitle;
@@ -330,47 +482,105 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Column(
               children: [
-                // Modern Search Input Field
-                Container(
-                  decoration: BoxDecoration(
-                    color: isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
-                      width: 1,
-                    ),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isDark ? AppTheme.darkTextPrimary : AppTheme.lightTextPrimary,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Search events by title...',
-                      hintStyle: TextStyle(
-                        color: isDark ? AppTheme.darkTextMuted : AppTheme.lightTextSecondary,
-                        fontSize: 14,
+                // Modern Search Input Field & Sort Button
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                            width: 1,
+                          ),
+                        ),
+                        child: TextField(
+                          controller: _searchController,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isDark ? AppTheme.darkTextPrimary : AppTheme.lightTextPrimary,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'Search events by title...',
+                            hintStyle: TextStyle(
+                              color: isDark ? AppTheme.darkTextMuted : AppTheme.lightTextSecondary,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: theme.colorScheme.primary,
+                              size: 22,
+                            ),
+                            suffixIcon: _searchQuery.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.cancel_rounded, size: 18),
+                                    tooltip: 'Clear search',
+                                    onPressed: () {
+                                      _searchController.clear();
+                                    },
+                                  )
+                                : null,
+                            filled: false,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        color: theme.colorScheme.primary,
-                        size: 22,
-                      ),
-                      suffixIcon: _searchQuery.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.cancel_rounded, size: 18),
-                              tooltip: 'Clear search',
-                              onPressed: () {
-                                _searchController.clear();
-                              },
-                            )
-                          : null,
-                      filled: false,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      border: InputBorder.none,
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Tooltip(
+                      message: 'Sort events: ${_selectedSort.label}',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          key: const Key('sort-button'),
+                          onTap: _showSortBottomSheet,
+                          borderRadius: BorderRadius.circular(16),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            height: 48,
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: _selectedSort != EventSortOption.dateAsc
+                                  ? (isDark ? const Color(0xFF381014) : const Color(0xFFFFE4E6))
+                                  : (isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: _selectedSort != EventSortOption.dateAsc
+                                    ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
+                                    : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder),
+                                width: 1.2,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.tune_rounded,
+                                  size: 20,
+                                  color: _selectedSort != EventSortOption.dateAsc
+                                      ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
+                                      : (isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary),
+                                ),
+                                if (_selectedSort != EventSortOption.dateAsc) ...[
+                                  const SizedBox(width: 4),
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      color: isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
 
@@ -489,9 +699,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      !isSearchingOrFiltering && _currentTabIndex == 2
-                          ? 'Total Joined: $totalJoined event${totalJoined == 1 ? '' : 's'}'
-                          : '${filteredEvents.length} event${filteredEvents.length == 1 ? '' : 's'} matching',
+                      '${filteredEvents.length} event${filteredEvents.length == 1 ? '' : 's'} matching',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary,

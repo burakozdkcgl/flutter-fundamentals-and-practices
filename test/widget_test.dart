@@ -132,9 +132,9 @@ void main() {
     await tester.tap(find.text('My Events'));
     await tester.pumpAndSettle();
 
-    // Event should be listed in My Events with joined counter
+    // Event should be listed in My Events with match counter
     expect(find.text('Campus Hackathon 2026'), findsOneWidget);
-    expect(find.text('Total Joined: 1 event'), findsOneWidget);
+    expect(find.text('1 event matching'), findsOneWidget);
 
     // Open details again from My Events
     await tester.tap(find.byKey(const Key('event-card-ev-1')));
@@ -202,4 +202,35 @@ void main() {
     // Should now show Switch to Light Mode tooltip
     expect(find.byTooltip('Switch to Light Mode'), findsOneWidget);
   });
+
+  testWidgets('Event sorting bottom sheet opens and sorts events',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const CampusEventExplorerApp());
+    await tester.pumpAndSettle();
+
+    // Verify sort button is present
+    final sortButton = find.byKey(const Key('sort-button'));
+    expect(sortButton, findsOneWidget);
+
+    // Tap sort button to open bottom sheet
+    await tester.tap(sortButton);
+    await tester.pumpAndSettle();
+
+    // Verify sort bottom sheet contents
+    expect(find.text('Sort Events By'), findsOneWidget);
+    expect(find.text('Upcoming Date'), findsOneWidget);
+    expect(find.text('Alphabetical (A - Z)'), findsOneWidget);
+    expect(find.text('Most Spots Left'), findsOneWidget);
+    expect(find.text('Most Popular'), findsOneWidget);
+
+    // Select Alphabetical sort
+    await tester.tap(find.text('Alphabetical (A - Z)'));
+    await tester.pumpAndSettle();
+
+    // Verify event card list is present
+    expect(find.byType(EventCard), findsWidgets);
+    // AI & Machine Learning should be visible in alphabetical sort
+    expect(find.text('AI & Machine Learning Hands-on Workshop'), findsOneWidget);
+  });
 }
+
