@@ -320,10 +320,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : Colors.white,
+              color: isDark ? AppTheme.darkScaffoldBg : Colors.white,
               border: Border(
                 bottom: BorderSide(
-                  color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                  color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                   width: 0.8,
                 ),
               ),
@@ -333,20 +333,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Modern Search Input Field
                 Container(
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                    color: isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                       width: 1,
                     ),
                   ),
                   child: TextField(
                     controller: _searchController,
-                    style: const TextStyle(fontSize: 14),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? AppTheme.darkTextPrimary : AppTheme.lightTextPrimary,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Search events by title...',
                       hintStyle: TextStyle(
-                        color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                        color: isDark ? AppTheme.darkTextMuted : AppTheme.lightTextSecondary,
                         fontSize: 14,
                       ),
                       prefixIcon: Icon(
@@ -398,25 +401,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? (category == 'All'
-                                    ? theme.colorScheme.primary
+                                    ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
                                     : catMeta.color)
                                 : (isDark
-                                    ? const Color(0xFF0F172A)
-                                    : const Color(0xFFF8FAFC)),
+                                    ? AppTheme.darkSurface
+                                    : AppTheme.lightSurfaceHigher),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               color: isSelected
                                   ? Colors.transparent
                                   : (isDark
-                                      ? const Color(0xFF334155)
-                                      : const Color(0xFFE2E8F0)),
+                                      ? AppTheme.darkBorder
+                                      : AppTheme.lightBorder),
                               width: 1,
                             ),
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
                                       color: (category == 'All'
-                                              ? theme.colorScheme.primary
+                                              ? (isDark ? AppTheme.estuCrimson : AppTheme.estuBurgundy)
                                               : catMeta.color)
                                           .withValues(alpha: 0.35),
                                       blurRadius: 8,
@@ -433,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 15,
                                 color: isSelected
                                     ? Colors.white
-                                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                                    : (isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary),
                               ),
                               const SizedBox(width: 6),
                               Text(
@@ -442,8 +445,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: isSelected
                                       ? Colors.white
                                       : (isDark
-                                          ? const Color(0xFFE2E8F0)
-                                          : const Color(0xFF334155)),
+                                          ? AppTheme.darkTextSecondary
+                                          : AppTheme.lightTextPrimary),
                                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                   fontSize: 13,
                                 ),
@@ -463,7 +466,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+              color: isDark ? AppTheme.darkSurface : AppTheme.lightSurfaceHigher,
+              border: Border(
+                bottom: BorderSide(
+                  color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+                  width: 0.6,
+                ),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -485,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : '${filteredEvents.length} event${filteredEvents.length == 1 ? '' : 's'} matching',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                        color: isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -544,9 +553,16 @@ class _HomeScreenState extends State<HomeScreen> {
       // Bottom Navigation Bar with 3 tabs and Live Badges
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
+          color: isDark ? AppTheme.darkSurface : Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+              width: 0.8,
+            ),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.06),
+              color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.06),
               blurRadius: 14,
               offset: const Offset(0, -2),
             ),

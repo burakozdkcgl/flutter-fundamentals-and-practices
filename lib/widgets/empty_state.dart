@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 /// Highly polished empty-state presentation widget with gradient accents and smooth CTA.
 class EmptyStateWidget extends StatelessWidget {
@@ -85,6 +86,7 @@ class EmptyStateWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 17,
                 letterSpacing: -0.2,
+                color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
               ),
             ),
             const SizedBox(height: 6),
@@ -96,7 +98,7 @@ class EmptyStateWidget extends StatelessWidget {
                 message,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                  color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF64748B),
                   height: 1.4,
                   fontSize: 13,
                 ),

@@ -54,16 +54,16 @@ class EventCard extends StatelessWidget {
       key: Key('event-card-${event.id}'),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        color: isDark ? AppTheme.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withValues(alpha: 0.3)
+                ? Colors.black.withValues(alpha: 0.4)
                 : const Color(0xFF64748B).withValues(alpha: 0.08),
             blurRadius: 18,
             offset: const Offset(0, 6),
@@ -280,6 +280,7 @@ class EventCard extends StatelessWidget {
                         fontSize: 17,
                         letterSpacing: -0.2,
                         height: 1.3,
+                        color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -290,14 +291,14 @@ class EventCard extends StatelessWidget {
                         Icon(
                           Icons.schedule_rounded,
                           size: 15,
-                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          color: isDark ? AppTheme.darkTextMuted : const Color(0xFF64748B),
                         ),
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             event.formattedDate,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                              color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF475569),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -321,7 +322,7 @@ class EventCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                              color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF475569),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -337,7 +338,7 @@ class EventCard extends StatelessWidget {
                         value: event.occupancyRate,
                         minHeight: 5,
                         backgroundColor: isDark
-                            ? const Color(0xFF334155)
+                            ? AppTheme.darkSurfaceHigher
                             : const Color(0xFFE2E8F0),
                         valueColor: AlwaysStoppedAnimation<Color>(
                           event.isFull
@@ -353,7 +354,7 @@ class EventCard extends StatelessWidget {
                     // Divider
                     Divider(
                       height: 1,
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                      color: isDark ? AppTheme.darkBorder : const Color(0xFFF1F5F9),
                     ),
                     const SizedBox(height: 12),
 

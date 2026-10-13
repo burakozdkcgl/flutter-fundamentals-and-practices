@@ -105,10 +105,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                  color: isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                    color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                   ),
                 ),
                 child: Column(
@@ -116,7 +116,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   children: [
                     Text(
                       _event.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Row(
@@ -253,10 +257,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                  color: isDark ? AppTheme.darkSurfaceHigher : AppTheme.lightSurfaceHigher,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                    color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                   ),
                 ),
                 child: Column(
@@ -264,7 +268,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   children: [
                     Text(
                       _event.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Row(
@@ -643,16 +651,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   Container(
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      color: isDark ? AppTheme.darkSurface : Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
                           color: isDark
-                              ? Colors.black.withValues(alpha: 0.25)
+                              ? Colors.black.withValues(alpha: 0.3)
                               : const Color(0xFF64748B).withValues(alpha: 0.06),
                           blurRadius: 14,
                           offset: const Offset(0, 4),
@@ -667,7 +675,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                color: theme.colorScheme.primary.withValues(alpha: 0.12),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -687,16 +695,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                       color: isDark
-                                          ? const Color(0xFF94A3B8)
-                                          : const Color(0xFF64748B),
+                                          ? AppTheme.darkTextMuted
+                                          : AppTheme.lightTextSecondary,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     _event.formattedDate,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
+                                      color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
                                     ),
                                   ),
                                 ],
@@ -708,7 +717,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           child: Divider(
                             height: 1,
-                            color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                            color: isDark ? AppTheme.darkBorder : const Color(0xFFF1F5F9),
                           ),
                         ),
 
@@ -718,7 +727,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                color: theme.colorScheme.primary.withValues(alpha: 0.12),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -738,16 +747,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                       color: isDark
-                                          ? const Color(0xFF94A3B8)
-                                          : const Color(0xFF64748B),
+                                          ? AppTheme.darkTextMuted
+                                          : AppTheme.lightTextSecondary,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     _event.venue,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
+                                      color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
                                     ),
                                   ),
                                 ],
@@ -759,7 +769,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 12.0),
                           child: Divider(
                             height: 1,
-                            color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                            color: isDark ? AppTheme.darkBorder : const Color(0xFFF1F5F9),
                           ),
                         ),
 
@@ -769,7 +779,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                color: theme.colorScheme.primary.withValues(alpha: 0.12),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -789,16 +799,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                       color: isDark
-                                          ? const Color(0xFF94A3B8)
-                                          : const Color(0xFF64748B),
+                                          ? AppTheme.darkTextMuted
+                                          : AppTheme.lightTextSecondary,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     '${_event.availablePlaces} available / ${_event.totalCapacity} total seats',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
+                                      color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
                                     ),
                                   ),
                                 ],
@@ -816,7 +827,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             value: _event.occupancyRate,
                             minHeight: 6,
                             backgroundColor: isDark
-                                ? const Color(0xFF334155)
+                                ? AppTheme.darkSurfaceHigher
                                 : const Color(0xFFE2E8F0),
                             valueColor: AlwaysStoppedAnimation<Color>(
                               _event.isFull
@@ -859,11 +870,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                          ? AppTheme.darkSurface
                           : const Color(0xFFF8FAFC),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
                       ),
                     ),
                     child: Text(
@@ -871,7 +882,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.65,
                         fontSize: 14.5,
-                        color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
+                        color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF334155),
                       ),
                     ),
                   ),
@@ -885,10 +896,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          color: isDark ? AppTheme.darkSurface : Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: isDark ? AppTheme.darkBorder : AppTheme.lightBorder,
+              width: 0.8,
+            ),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+              color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.08),
               offset: const Offset(0, -4),
               blurRadius: 16,
             ),

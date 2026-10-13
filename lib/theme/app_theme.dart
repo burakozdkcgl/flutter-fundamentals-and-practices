@@ -7,16 +7,30 @@ class AppTheme {
   // ESTÜ Corporate Brand Colors (Eskişehir Teknik Üniversitesi)
   static const Color estuBurgundy = Color(0xFF94000D);
   static const Color estuBurgundyLight = Color(0xFFA61C24);
-  static const Color estuBurgundyDark = Color(0xFFF43F5E); // For dark mode vibrancy
-  static const Color estuCharcoal = Color(0xFF1E293B);
-  static const Color estuGraphite = Color(0xFF334155);
+  static const Color estuCrimson = Color(0xFFE5383B); // True crimson for dark mode (NOT pink!)
+
+  // Neutral Tokens - Light Mode
+  static const Color lightScaffoldBg = Color(0xFFF8FAFC);
+  static const Color lightSurface = Colors.white;
+  static const Color lightSurfaceHigher = Color(0xFFF1F5F9);
+  static const Color lightBorder = Color(0xFFE2E8F0);
+  static const Color lightTextPrimary = Color(0xFF0F172A);
+  static const Color lightTextSecondary = Color(0xFF64748B);
+
+  // Neutral Tokens - Dark Mode (Obsidian / Graphite - cohesive dark palette, NOT navy!)
+  static const Color darkScaffoldBg = Color(0xFF111113);
+  static const Color darkSurface = Color(0xFF1A1A1E);
+  static const Color darkSurfaceHigher = Color(0xFF24242A);
+  static const Color darkBorder = Color(0xFF2E2E36);
+  static const Color darkTextPrimary = Color(0xFFF4F4F6);
+  static const Color darkTextSecondary = Color(0xFFA1A1AA);
+  static const Color darkTextMuted = Color(0xFF71717A);
 
   // Category Accent Colors
   static const Color techColor = Color(0xFF2563EB);
   static const Color artsColor = Color(0xFF9333EA);
   static const Color sportsColor = Color(0xFFEA580C);
   static const Color careerColor = Color(0xFF0D9488);
-  static const Color defaultCategoryColor = estuBurgundy;
 
   /// Helper to get category metadata (color, icon, container color)
   static CategoryMeta getCategoryMeta(String category, bool isDark) {
@@ -25,7 +39,7 @@ class AppTheme {
         return CategoryMeta(
           color: isDark ? const Color(0xFF60A5FA) : techColor,
           backgroundColor: isDark
-              ? const Color(0xFF1E3A8A).withValues(alpha: 0.35)
+              ? const Color(0xFF1E293B)
               : const Color(0xFFEFF6FF),
           icon: Icons.computer_rounded,
         );
@@ -33,7 +47,7 @@ class AppTheme {
         return CategoryMeta(
           color: isDark ? const Color(0xFFC084FC) : artsColor,
           backgroundColor: isDark
-              ? const Color(0xFF581C87).withValues(alpha: 0.35)
+              ? const Color(0xFF2E1065).withValues(alpha: 0.5)
               : const Color(0xFFFAF5FF),
           icon: Icons.palette_rounded,
         );
@@ -41,7 +55,7 @@ class AppTheme {
         return CategoryMeta(
           color: isDark ? const Color(0xFFFB923C) : sportsColor,
           backgroundColor: isDark
-              ? const Color(0xFF7C2D12).withValues(alpha: 0.35)
+              ? const Color(0xFF431407).withValues(alpha: 0.5)
               : const Color(0xFFFFF7ED),
           icon: Icons.sports_basketball_rounded,
         );
@@ -49,15 +63,15 @@ class AppTheme {
         return CategoryMeta(
           color: isDark ? const Color(0xFF2DD4BF) : careerColor,
           backgroundColor: isDark
-              ? const Color(0xFF134E4A).withValues(alpha: 0.35)
+              ? const Color(0xFF042F2E).withValues(alpha: 0.5)
               : const Color(0xFFF0FDFA),
           icon: Icons.business_center_rounded,
         );
       default:
         return CategoryMeta(
-          color: isDark ? estuBurgundyDark : estuBurgundy,
+          color: isDark ? estuCrimson : estuBurgundy,
           backgroundColor: isDark
-              ? const Color(0xFF881337).withValues(alpha: 0.35)
+              ? const Color(0xFF381014)
               : const Color(0xFFFFF1F2),
           icon: Icons.grid_view_rounded,
         );
@@ -70,7 +84,7 @@ class AppTheme {
       seedColor: estuBurgundy,
       brightness: Brightness.light,
       primary: estuBurgundy,
-      surface: Colors.white,
+      surface: lightSurface,
     );
 
     return ThemeData(
@@ -78,20 +92,20 @@ class AppTheme {
       fontFamily: 'Poppins',
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+      scaffoldBackgroundColor: lightScaffoldBg,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFFF8FAFC),
-        foregroundColor: Color(0xFF0F172A),
+        backgroundColor: lightScaffoldBg,
+        foregroundColor: lightTextPrimary,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: Colors.white,
+        color: lightSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
+          side: const BorderSide(color: lightBorder, width: 1),
         ),
       ),
       chipTheme: ChipThemeData(
@@ -103,11 +117,11 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: lightSurface,
         surfaceTintColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: lightSurface,
         elevation: 2,
         indicatorColor: const Color(0xFFFFE4E6),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
@@ -121,7 +135,7 @@ class AppTheme {
           return const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF64748B),
+            color: lightTextSecondary,
           );
         }),
       ),
@@ -134,13 +148,17 @@ class AppTheme {
     );
   }
 
-  /// Dark theme definition with ESTÜ dark palette
+  /// Dark theme definition with cohesive obsidian & ESTÜ crimson palette
   static ThemeData get darkTheme {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: estuBurgundyDark,
+      seedColor: estuCrimson,
       brightness: Brightness.dark,
-      primary: estuBurgundyDark,
-      surface: const Color(0xFF1E293B),
+      primary: estuCrimson,
+      surface: darkSurface,
+      surfaceContainerHighest: darkSurfaceHigher,
+      outline: darkBorder,
+      onSurface: darkTextPrimary,
+      onSurfaceVariant: darkTextSecondary,
     );
 
     return ThemeData(
@@ -148,20 +166,20 @@ class AppTheme {
       fontFamily: 'Poppins',
       brightness: Brightness.dark,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: const Color(0xFF0F172A),
+      scaffoldBackgroundColor: darkScaffoldBg,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF0F172A),
-        foregroundColor: Colors.white,
+        backgroundColor: darkScaffoldBg,
+        foregroundColor: darkTextPrimary,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: const Color(0xFF1E293B),
+        color: darkSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: Color(0xFF334155), width: 1),
+          side: const BorderSide(color: darkBorder, width: 1),
         ),
       ),
       chipTheme: ChipThemeData(
@@ -173,32 +191,41 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        backgroundColor: const Color(0xFF1E293B),
+        backgroundColor: darkSurface,
         surfaceTintColor: Colors.transparent,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: const Color(0xFF1E293B),
-        elevation: 2,
-        indicatorColor: const Color(0xFF881337),
+        backgroundColor: darkSurface,
+        elevation: 0,
+        indicatorColor: const Color(0xFF381014),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: estuCrimson);
+          }
+          return const IconThemeData(color: darkTextMuted);
+        }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFFFDA4AF),
+              color: estuCrimson,
             );
           }
           return const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF94A3B8),
+            color: darkTextMuted,
           );
         }),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
+        backgroundColor: darkSurfaceHigher,
+        contentTextStyle: const TextStyle(color: darkTextPrimary, fontFamily: 'Poppins'),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
+          side: const BorderSide(color: darkBorder),
         ),
       ),
     );
