@@ -22,6 +22,8 @@ $RECYCLE.BIN/
 *.iws
 .idea/
 
+.github/
+
 # Visual Studio Code related
 .vscode/
 
