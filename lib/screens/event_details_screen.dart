@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/event.dart';
+import '../theme/app_theme.dart';
 import 'image_viewer_screen.dart';
 
-/// Screen displaying complete details for a selected event.
+/// Screen displaying complete details for a selected event with rich layout and animations.
 class EventDetailsScreen extends StatefulWidget {
   final Event event;
   final VoidCallback onStateChanged;
@@ -33,13 +34,25 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     widget.onStateChanged();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          _event.isFavorite
-              ? 'Added "${_event.title}" to favorites.'
-              : 'Removed "${_event.title}" from favorites.',
+        content: Row(
+          children: [
+            Icon(
+              _event.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                _event.isFavorite
+                    ? 'Added "${_event.title}" to favorites.'
+                    : 'Removed "${_event.title}" from favorites.',
+              ),
+            ),
+          ],
         ),
+        backgroundColor: _event.isFavorite ? const Color(0xFFE11D48) : const Color(0xFF475569),
         duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -48,33 +61,88 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
+        final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
         return AlertDialog(
-          title: const Text('Confirm Participation'),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.confirmation_num_rounded,
+                  color: Color(0xFF2563EB),
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Confirm Participation',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Are you sure you want to join this event?',
-                style: Theme.of(dialogContext).textTheme.bodyMedium,
+                style: Theme.of(dialogContext).textTheme.bodyMedium?.copyWith(
+                      color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                    ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               Container(
-                padding: const EdgeInsets.all(12),
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Theme.of(dialogContext).colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
+                  color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       _event.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.calendar_today_rounded, size: 14, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'Date: ${_event.formattedDate}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
-                    Text('Date: ${_event.formattedDate}'),
-                    Text('Venue: ${_event.venue}'),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.location_on_rounded, size: 14, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'Venue: ${_event.venue}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -90,6 +158,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 Navigator.of(dialogContext).pop();
                 _confirmJoin();
               },
+              style: FilledButton.styleFrom(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
               child: const Text('Yes'),
             ),
           ],
@@ -116,11 +187,20 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     });
     widget.onStateChanged();
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
       SnackBar(
-        content: Text('Successfully registered for "${_event.title}"!'),
-        backgroundColor: Colors.teal.shade700,
-        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text('Successfully registered for "${_event.title}"!'),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF059669),
       ),
     );
   }
@@ -129,30 +209,88 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
+        final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
         return AlertDialog(
-          title: const Text('Cancel Participation'),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFDC2626).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.event_busy_rounded,
+                  color: Color(0xFFDC2626),
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Cancel Participation',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Are you sure you want to cancel your participation?'),
-              const SizedBox(height: 12),
+              Text(
+                'Are you sure you want to cancel your participation?',
+                style: Theme.of(dialogContext).textTheme.bodyMedium?.copyWith(
+                      color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                    ),
+              ),
+              const SizedBox(height: 14),
               Container(
-                padding: const EdgeInsets.all(12),
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Theme.of(dialogContext).colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
+                  color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       _event.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.calendar_today_rounded, size: 14, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'Date: ${_event.formattedDate}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
-                    Text('Date: ${_event.formattedDate}'),
-                    Text('Venue: ${_event.venue}'),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.location_on_rounded, size: 14, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'Venue: ${_event.venue}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -164,7 +302,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               child: const Text('No'),
             ),
             FilledButton(
-              style: FilledButton.styleFrom(backgroundColor: Colors.red.shade700),
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFFDC2626),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 _confirmCancel();
@@ -186,11 +327,20 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     });
     widget.onStateChanged();
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
       SnackBar(
-        content: Text('Participation cancelled for "${_event.title}".'),
-        backgroundColor: Colors.orange.shade800,
-        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            const Icon(Icons.cancel_outlined, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text('Participation cancelled for "${_event.title}".'),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFFEA580C),
       ),
     );
   }
@@ -201,6 +351,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         builder: (context) => ImageViewerScreen(
           imagePath: _event.imagePath,
           title: _event.title,
+          heroTag: 'event-img-${_event.id}',
         ),
       ),
     );
@@ -209,79 +360,125 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final catMeta = AppTheme.getCategoryMeta(_event.category, isDark);
 
     // Determine availability badge appearance
-    Color availabilityColor;
-    String availabilityText;
+    final Color availabilityColor;
+    final Color availabilityBg;
+    final String availabilityText;
+    final IconData availabilityIcon;
+
     if (_event.isFull) {
-      availabilityColor = Colors.red.shade700;
+      availabilityColor = isDark ? const Color(0xFFF87171) : const Color(0xFFDC2626);
+      availabilityBg = isDark
+          ? const Color(0xFF7F1D1D).withValues(alpha: 0.35)
+          : const Color(0xFFFEE2E2);
       availabilityText = 'Full (0 available)';
+      availabilityIcon = Icons.lock_rounded;
     } else if (_event.availablePlaces == 1) {
-      availabilityColor = Colors.orange.shade800;
+      availabilityColor = isDark ? const Color(0xFFFBBF24) : const Color(0xFFD97706);
+      availabilityBg = isDark
+          ? const Color(0xFF78350F).withValues(alpha: 0.35)
+          : const Color(0xFFFEF3C7);
       availabilityText = 'Only 1 spot left!';
+      availabilityIcon = Icons.local_fire_department_rounded;
     } else {
-      availabilityColor = Colors.green.shade700;
+      availabilityColor = isDark ? const Color(0xFF4ADE80) : const Color(0xFF16A34A);
+      availabilityBg = isDark
+          ? const Color(0xFF14532D).withValues(alpha: 0.35)
+          : const Color(0xFFDCFCE7);
       availabilityText = '${_event.availablePlaces} / ${_event.totalCapacity} spots available';
+      availabilityIcon = Icons.event_seat_rounded;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Event Details'),
+        title: const Text(
+          'Event Details',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
-          IconButton(
-            icon: Icon(
-              _event.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: _event.isFavorite ? Colors.redAccent : null,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(
+                _event.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: _event.isFavorite ? const Color(0xFFEF4444) : null,
+              ),
+              tooltip: _event.isFavorite ? 'Remove from favorites' : 'Add to favorites',
+              onPressed: _toggleFavorite,
             ),
-            tooltip: _event.isFavorite ? 'Remove from favorites' : 'Add to favorites',
-            onPressed: _toggleFavorite,
           ),
         ],
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Double-tap Image with Hint
+            // Double-tap Image with Hint & Zoom Affordance
             GestureDetector(
+              key: const Key('details-image-gesture'),
               onDoubleTap: _openEnlargedImage,
               child: Stack(
                 children: [
                   SizedBox(
-                    height: 250,
+                    height: 260,
                     width: double.infinity,
-                    child: Image.asset(
-                      _event.imagePath,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey.shade300,
-                        child: const Center(
-                          child: Icon(Icons.broken_image, size: 64, color: Colors.grey),
+                    child: Hero(
+                      tag: 'event-img-${_event.id}',
+                      child: Image.asset(
+                        _event.imagePath,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
+                          child: const Center(
+                            child: Icon(Icons.broken_image, size: 64, color: Colors.grey),
+                          ),
                         ),
                       ),
                     ),
                   ),
+
+                  // Subtle gradient shadow
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.4),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
                   // Double-tap hint badge
                   Positioned(
-                    bottom: 12,
-                    right: 12,
+                    bottom: 14,
+                    right: 14,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.65),
+                        color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white24, width: 0.8),
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.touch_app, size: 14, color: Colors.white),
-                          SizedBox(width: 4),
+                          Icon(Icons.touch_app_rounded, size: 14, color: Colors.white),
+                          SizedBox(width: 5),
                           Text(
                             'Double-tap to enlarge',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -298,41 +495,97 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category & Availability Badges
-                  Row(
+                  // Badges Row
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
+                      // Category Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                          color: catMeta.backgroundColor,
                           borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          _event.category,
-                          style: TextStyle(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                          border: Border.all(
+                            color: catMeta.color.withValues(alpha: 0.3),
+                            width: 0.8,
                           ),
                         ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(catMeta.icon, size: 15, color: catMeta.color),
+                            const SizedBox(width: 6),
+                            Text(
+                              _event.category,
+                              style: TextStyle(
+                                color: catMeta.color,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 8),
+
+                      // Availability Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: availabilityColor.withValues(alpha: 0.12),
+                          color: availabilityBg,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: availabilityColor.withValues(alpha: 0.3)),
-                        ),
-                        child: Text(
-                          availabilityText,
-                          style: TextStyle(
-                            color: availabilityColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                          border: Border.all(
+                            color: availabilityColor.withValues(alpha: 0.35),
+                            width: 0.8,
                           ),
                         ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(availabilityIcon, size: 14, color: availabilityColor),
+                            const SizedBox(width: 6),
+                            Text(
+                              availabilityText,
+                              style: TextStyle(
+                                color: availabilityColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+
+                      // Joined Banner if Registered
+                      if (_event.isJoined)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF059669).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFF059669).withValues(alpha: 0.4),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.check_circle_rounded,
+                                  size: 14, color: Color(0xFF059669)),
+                              SizedBox(width: 5),
+                              Text(
+                                'You are attending',
+                                style: TextStyle(
+                                  color: Color(0xFF059669),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -341,148 +594,250 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   Text(
                     _event.title,
                     style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Info Cards: Date, Time & Venue
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.calendar_today,
-                                size: 18,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Date & Time',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    _event.formattedDate,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: Divider(height: 1),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.location_on,
-                                size: 18,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Venue',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    _event.venue,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: Divider(height: 1),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.people,
-                                size: 18,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Capacity & Availability',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    '${_event.availablePlaces} available / ${_event.totalCapacity} total seats',
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.4,
+                      height: 1.3,
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  // Description Header
-                  Text(
-                    'About this Event',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  // Info Cards: Date, Time & Venue
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: isDark
+                              ? Colors.black.withValues(alpha: 0.25)
+                              : const Color(0xFF64748B).withValues(alpha: 0.06),
+                          blurRadius: 14,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Date & Time Row
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.calendar_today_rounded,
+                                size: 18,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Date & Time',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: isDark
+                                          ? const Color(0xFF94A3B8)
+                                          : const Color(0xFF64748B),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _event.formattedDate,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Divider(
+                            height: 1,
+                            color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                          ),
+                        ),
+
+                        // Venue Row
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 18,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Venue',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: isDark
+                                          ? const Color(0xFF94A3B8)
+                                          : const Color(0xFF64748B),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _event.venue,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Divider(
+                            height: 1,
+                            color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                          ),
+                        ),
+
+                        // Capacity Row
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.people_alt_rounded,
+                                size: 18,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Capacity & Availability',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: isDark
+                                          ? const Color(0xFF94A3B8)
+                                          : const Color(0xFF64748B),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '${_event.availablePlaces} available / ${_event.totalCapacity} total seats',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // Occupancy Progress Bar
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: LinearProgressIndicator(
+                            value: _event.occupancyRate,
+                            minHeight: 6,
+                            backgroundColor: isDark
+                                ? const Color(0xFF334155)
+                                : const Color(0xFFE2E8F0),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              _event.isFull
+                                  ? const Color(0xFFEF4444)
+                                  : (_event.occupancyRate > 0.8
+                                      ? const Color(0xFFF59E0B)
+                                      : const Color(0xFF10B981)),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _event.description,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      height: 1.6,
-                      color: theme.colorScheme.onSurfaceVariant,
+                  const SizedBox(height: 24),
+
+                  // Description Header with Accent Marker
+                  Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'About this Event',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                          : const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      ),
+                    ),
+                    child: Text(
+                      _event.description,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.65,
+                        fontSize: 14.5,
+                        color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 36),
                 ],
               ),
             ),
@@ -490,14 +845,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              offset: const Offset(0, -3),
-              blurRadius: 10,
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+              offset: const Offset(0, -4),
+              blurRadius: 16,
             ),
           ],
         ),
@@ -505,32 +860,41 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           child: _event.isJoined
               ? OutlinedButton.icon(
                   onPressed: _handleCancelParticipation,
-                  icon: const Icon(Icons.cancel_outlined, color: Colors.red),
+                  icon: const Icon(Icons.cancel_outlined, color: Color(0xFFDC2626)),
                   label: const Text(
                     'Cancel Participation',
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Color(0xFFDC2626),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.red),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: Color(0xFFDC2626), width: 1.5),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 )
               : FilledButton.icon(
                   onPressed: _event.isFull ? null : _handleJoinEvent,
-                  icon: Icon(_event.isFull ? Icons.block : Icons.how_to_reg),
+                  icon: Icon(
+                    _event.isFull ? Icons.block_rounded : Icons.how_to_reg_rounded,
+                    size: 20,
+                  ),
                   label: Text(
                     _event.isFull ? 'Event Full' : 'Join Event',
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   style: FilledButton.styleFrom(
                     backgroundColor: _event.isFull ? Colors.grey : theme.colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
+                    elevation: _event.isFull ? 0 : 3,
+                    shadowColor: theme.colorScheme.primary.withValues(alpha: 0.4),
                   ),
                 ),
         ),
