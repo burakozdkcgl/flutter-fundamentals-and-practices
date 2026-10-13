@@ -107,6 +107,103 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showEstuInfoDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 90,
+                height: 90,
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.estuBurgundy.withValues(alpha: 0.18),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/estu_logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Eskişehir Teknik Üniversitesi',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                  color: AppTheme.estuBurgundy,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Campus Event Explorer',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppTheme.estuBurgundy.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text(
+                  'BIM493 - Mobile Programming I',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.estuBurgundy,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'Discover campus events, save your favorites, and manage registrations for university life.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.4,
+                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Center(
+              child: FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppTheme.estuBurgundy,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                ),
+                child: const Text('Close'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// Filters events based on tab, title search, and selected category.
   List<Event> _getFilteredEvents() {
     // 1. Base list according to selected tab
@@ -154,44 +251,54 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (_currentTabIndex == 2) {
       tabTitle = 'My Events';
     } else {
-      tabTitle = 'Explore Campus Events';
+      tabTitle = 'Explore Campus';
     }
 
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 14.0, top: 8.0, bottom: 8.0),
+          child: Tooltip(
+            message: 'Eskişehir Teknik Üniversitesi',
+            child: InkWell(
+              onTap: _showEstuInfoDialog,
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/estu_logo.png',
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => const Icon(
+                      Icons.school_rounded,
+                      size: 20,
+                      color: AppTheme.estuBurgundy,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         title: Text(
           tabTitle,
           style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.3),
         ),
         actions: [
-          // Total joined events counter chip in app bar
-          Padding(
-            padding: const EdgeInsets.only(right: 6.0),
-            child: Chip(
-              backgroundColor: isDark
-                  ? const Color(0xFF14532D).withValues(alpha: 0.4)
-                  : const Color(0xFFDCFCE7),
-              side: BorderSide(
-                color: isDark ? const Color(0xFF16A34A) : const Color(0xFF86EFAC),
-                width: 0.8,
-              ),
-              avatar: const Icon(
-                Icons.check_circle_rounded,
-                size: 16,
-                color: Color(0xFF16A34A),
-              ),
-              label: Text(
-                'Joined: $totalJoined',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Color(0xFF16A34A),
-                ),
-              ),
-              visualDensity: VisualDensity.compact,
-            ),
-          ),
-
           // Theme Mode Switcher
           IconButton(
             icon: Icon(
@@ -204,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   isDark ? ThemeMode.light : ThemeMode.dark;
             },
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
         ],
       ),
       body: Column(
@@ -373,7 +480,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '${filteredEvents.length} event${filteredEvents.length == 1 ? '' : 's'} matching',
+                      !isSearchingOrFiltering && _currentTabIndex == 2
+                          ? 'Total Joined: $totalJoined event${totalJoined == 1 ? '' : 's'}'
+                          : '${filteredEvents.length} event${filteredEvents.length == 1 ? '' : 's'} matching',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),

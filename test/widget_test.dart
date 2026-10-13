@@ -10,7 +10,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify app bar title
-    expect(find.text('Explore Campus Events'), findsOneWidget);
+    expect(find.text('Explore Campus'), findsOneWidget);
 
     // Verify bottom navigation destinations
     expect(find.text('Explore'), findsOneWidget);
@@ -128,15 +128,13 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    // Joined counter should show 1
-    expect(find.text('Joined: 1'), findsOneWidget);
-
     // Go to My Events tab
     await tester.tap(find.text('My Events'));
     await tester.pumpAndSettle();
 
-    // Event should be listed in My Events
+    // Event should be listed in My Events with joined counter
     expect(find.text('Campus Hackathon 2026'), findsOneWidget);
+    expect(find.text('Total Joined: 1 event'), findsOneWidget);
 
     // Open details again from My Events
     await tester.tap(find.byKey(const Key('event-card-ev-1')));
@@ -163,7 +161,6 @@ void main() {
 
     // Now My Events is empty
     expect(find.text('No Joined Events'), findsOneWidget);
-    expect(find.text('Joined: 0'), findsOneWidget);
   });
 
   testWidgets('Double-tap image opens ImageViewerScreen', (WidgetTester tester) async {

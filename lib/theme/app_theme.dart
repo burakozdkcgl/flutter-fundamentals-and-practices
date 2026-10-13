@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens, custom themes, and category styling for Campus Event Explorer.
+/// Design tokens, custom themes, and category styling based on ESTÜ corporate branding.
 class AppTheme {
   AppTheme._();
 
-  // Primary Brand Colors
-  static const Color primaryBlue = Color(0xFF2563EB);
-  static const Color primaryBlueDark = Color(0xFF3B82F6);
-  static const Color secondaryCyan = Color(0xFF06B6D4);
+  // ESTÜ Corporate Brand Colors (Eskişehir Teknik Üniversitesi)
+  static const Color estuBurgundy = Color(0xFF94000D);
+  static const Color estuBurgundyLight = Color(0xFFA61C24);
+  static const Color estuBurgundyDark = Color(0xFFF43F5E); // For dark mode vibrancy
+  static const Color estuCharcoal = Color(0xFF1E293B);
+  static const Color estuGraphite = Color(0xFF334155);
 
   // Category Accent Colors
   static const Color techColor = Color(0xFF2563EB);
   static const Color artsColor = Color(0xFF9333EA);
   static const Color sportsColor = Color(0xFFEA580C);
   static const Color careerColor = Color(0xFF0D9488);
-  static const Color defaultCategoryColor = Color(0xFF4F46E5);
+  static const Color defaultCategoryColor = estuBurgundy;
 
   /// Helper to get category metadata (color, icon, container color)
   static CategoryMeta getCategoryMeta(String category, bool isDark) {
@@ -53,21 +55,21 @@ class AppTheme {
         );
       default:
         return CategoryMeta(
-          color: isDark ? const Color(0xFF818CF8) : defaultCategoryColor,
+          color: isDark ? estuBurgundyDark : estuBurgundy,
           backgroundColor: isDark
-              ? const Color(0xFF312E81).withValues(alpha: 0.35)
-              : const Color(0xFFEEF2FF),
+              ? const Color(0xFF881337).withValues(alpha: 0.35)
+              : const Color(0xFFFFF1F2),
           icon: Icons.grid_view_rounded,
         );
     }
   }
 
-  /// Light theme definition
+  /// Light theme definition with ESTÜ Burgundy brand identity
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: primaryBlue,
+      seedColor: estuBurgundy,
       brightness: Brightness.light,
-      primary: primaryBlue,
+      primary: estuBurgundy,
       surface: Colors.white,
     );
 
@@ -107,13 +109,13 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.white,
         elevation: 2,
-        indicatorColor: const Color(0xFFDBEAFE),
+        indicatorColor: const Color(0xFFFFE4E6),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: primaryBlue,
+              color: estuBurgundy,
             );
           }
           return const TextStyle(
@@ -132,12 +134,12 @@ class AppTheme {
     );
   }
 
-  /// Dark theme definition
+  /// Dark theme definition with ESTÜ dark palette
   static ThemeData get darkTheme {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: primaryBlueDark,
+      seedColor: estuBurgundyDark,
       brightness: Brightness.dark,
-      primary: primaryBlueDark,
+      primary: estuBurgundyDark,
       surface: const Color(0xFF1E293B),
     );
 
@@ -177,13 +179,13 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: const Color(0xFF1E293B),
         elevation: 2,
-        indicatorColor: const Color(0xFF1E3A8A),
+        indicatorColor: const Color(0xFF881337),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF93C5FD),
+              color: Color(0xFFFDA4AF),
             );
           }
           return const TextStyle(
