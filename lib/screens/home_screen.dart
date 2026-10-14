@@ -55,6 +55,89 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _allEvents = getInitialMockEvents();
     _searchController.addListener(_onSearchChanged);
+
+    // Deep linking support via web query parameters
+    try {
+      final themeParam = Uri.base.queryParameters['theme'];
+      if (themeParam == 'dark') {
+        CampusEventExplorerApp.themeModeNotifier.value = ThemeMode.dark;
+      } else if (themeParam == 'light') {
+        CampusEventExplorerApp.themeModeNotifier.value = ThemeMode.light;
+      }
+
+      final tabParam = Uri.base.queryParameters['tab'];
+      if (tabParam != null) {
+        final parsed = int.tryParse(tabParam);
+        if (parsed != null && parsed >= 0 && parsed <= 2) {
+          _currentTabIndex = parsed;
+        }
+      }
+
+      final presetParam = Uri.base.queryParameters['preset'];
+      if (presetParam == 'favorites6') {
+        const favIds = {'ev-4', 'ev-6', 'ev-13', 'ev-14', 'ev-15', 'ev-17'};
+        for (final e in _allEvents) {
+          if (favIds.contains(e.id)) {
+            e.isFavorite = true;
+          }
+        }
+      } else if (presetParam == 'sports4') {
+        const sportIds = {'ev-18', 'ev-19', 'ev-20', 'ev-21'};
+        for (final e in _allEvents) {
+          if (sportIds.contains(e.id)) {
+            e.isJoined = true;
+            e.availablePlaces =
+                (e.availablePlaces - 1).clamp(0, e.totalCapacity);
+          }
+        }
+      } else if (Uri.base.queryParameters['sample'] == 'true') {
+        if (_allEvents.isNotEmpty) {
+          _allEvents[0].isFavorite = true;
+          _allEvents[0].isJoined = true;
+          _allEvents[0].availablePlaces =
+              (_allEvents[0].availablePlaces - 1).clamp(0, _allEvents[0].totalCapacity);
+        }
+      }
+
+      final categoryParam = Uri.base.queryParameters['category'];
+      if (categoryParam != null && _categories.contains(categoryParam)) {
+        _selectedCategory = categoryParam;
+      }
+
+      final searchParam = Uri.base.queryParameters['search'];
+      if (searchParam != null && searchParam.isNotEmpty) {
+        _searchController.text = searchParam;
+        _searchQuery = searchParam;
+      }
+
+      if (Uri.base.queryParameters['dialog'] == 'sort') {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _showSortBottomSheet();
+          }
+        });
+      }
+
+      final eventId = Uri.base.queryParameters['event'];
+      if (eventId != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          final target = _allEvents.firstWhere(
+            (e) => e.id == eventId,
+            orElse: () => _allEvents.first,
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => EventDetailsScreen(
+                event: target,
+                onStateChanged: () => setState(() {}),
+              ),
+            ),
+          );
+        });
+      }
+    } catch (_) {}
   }
 
   @override

@@ -58,14 +58,15 @@ Tools • Dart 3.13.5 • DevTools 2.60.0
 ## 📱 Features & Implementation Details
 
 1. **Event Data & Explore Screen:**
-   - 6 mock campus events spanning 4 categories: `Technology`, `Arts`, `Sports`, and `Career`.
-   - Includes initially full event (`Inter-Faculty Basketball Championship`, 0 seats) and an event with exactly one place left (`Autumn Contemporary Art Exhibition`, 1 seat).
+   - 30 realistic campus events spanning 5 categories: `Technology`, `Arts`, `Sports`, `Career`, and `Academic`.
+   - Includes initially full events (`Inter-Faculty Basketball Championship`, `Game Development Bootcamp`, `E-Sports Masters`) and events with exactly one place left (`Autumn Contemporary Art Exhibition`, `Mock Coding Interviews`).
    - Scrollable event cards with local images, category badges, venue, date/time, capacity indicators, and quick favorite toggling.
 
-2. **Combined Search & Category Filters:**
+2. **Combined Search, Category Filters & Event Sorting:**
    - Title search is case-insensitive and trims leading/trailing whitespace.
-   - Filter chips for "All" plus 4 distinct categories.
+   - Filter chips for "All" plus 5 distinct categories (`Technology`, `Arts`, `Sports`, `Career`, `Academic`).
    - Search and category work together simultaneously.
+   - **Event Sorting Options:** Interactive bottom sheet allowing sorting by Upcoming Date, Alphabetical (A-Z), Most Spots Left, and Most Popular.
    - Real-time matching count indicator (`X events matching`).
    - Clear search/reset filters buttons.
    - Applied consistently across Explore, Favorites, and My Events tabs.
@@ -80,7 +81,7 @@ Tools • Dart 3.13.5 • DevTools 2.60.0
    - **Favorites Tab:** Displays only favorited events. Shows custom empty-state if empty.
    - **My Events Tab:** Displays only registered events. Shows custom empty-state if empty.
    - Badges in bottom navigation bar reflect live counts of favorites and registered events.
-   - App bar displays total number of joined events.
+   - Match counters uniformly display `X events matching`.
 
 5. **Join & Cancel Participation Logic:**
    - **Joining:** Opens confirmation dialog specifying title, date/time, and venue. Confirming decreases available seats by 1, adds to My Events, and provides visual snackbar feedback.
@@ -89,8 +90,8 @@ Tools • Dart 3.13.5 • DevTools 2.60.0
 
 6. **Typography & Layout:**
    - Bundled **Poppins** custom font (Regular 400, SemiBold 600, Bold 700) declared in `pubspec.yaml` and applied globally via `ThemeData`.
-   - Clean Material 3 design using `Scaffold`, `NavigationBar`, `Card`, `Row`, `Column`, `Padding`, and `Expanded`.
-   - At least one reusable `StatelessWidget` (`EventCard`, `EmptyStateWidget`) and `StatefulWidget` (`HomeScreen`, `EventDetailsScreen`).
+   - Clean Material 3 design with ESTÜ Burgundy/Crimson corporate palette and cohesive obsidian dark mode.
+   - Reusable `StatelessWidget` (`EventCard`, `EmptyStateWidget`) and `StatefulWidget` (`HomeScreen`, `EventDetailsScreen`, `ImageViewerScreen`).
 
 ---
 
@@ -100,14 +101,9 @@ Tools • Dart 3.13.5 • DevTools 2.60.0
 * **Poppins Font Family**: Created by Indian Type Web (ITF) / Google Fonts.
   - License: SIL Open Font License (OFL) Version 1.1 (bundled in `assets/fonts/OFL.txt`).
 
-### Images
-All images are royalty-free photos sourced from Unsplash under the Unsplash Free License:
-* `tech_hackathon.jpg`: Photo by Marvin Meyer on Unsplash (Hackathon / Collaboration)
-* `art_exhibition.jpg`: Photo by Europeana on Unsplash (Art Gallery)
-* `sports_tournament.jpg`: Photo by Markus Spiske on Unsplash (Sports / Basketball)
-* `music_fest.jpg`: Photo by Anthony Delanoix on Unsplash (Concert / Music)
-* `ai_workshop.jpg`: Photo by Desola Lanre-Ologun on Unsplash (AI / Coding Workshop)
-* `career_networking.jpg`: Photo by Headway on Unsplash (Career / Networking)
+### Images & Branding
+* **ESTÜ Logo**: Official university emblem of Eskişehir Technical University (`assets/images/estu_logo.png`).
+* **Event Photos**: All 30 event cover photos are royalty-free high-resolution photography sourced from Unsplash under the Unsplash Free License (including technology, robotics, art galleries, symphonies, sports, esports, career fairs, and astronomy).
 
 ---
 
@@ -130,16 +126,19 @@ All images are royalty-free photos sourced from Unsplash under the Unsplash Free
 
 ## 📷 Screenshots
 
-> *Add 4 screenshots of the running application below before final submission:*
+The application features a responsive design supporting both ESTÜ Light Theme and Obsidian Dark Theme across all tabs and interactive states:
 
-1. **Explore Screen:**
-   ![Explore Screen](screenshots/explore_screen.png)
+| 1. Explore Screen (Light Mode) | 2. Confirm Participation Dialog |
+| :---: | :---: |
+| <img src="screenshots/assignment1_01_explore_overview.png" width="360" alt="Explore Screen" /> | <img src="screenshots/assignment1_02_event_details_dialog.png" width="360" alt="Confirm Dialog" /> |
+| **Explore Screen:** Event catalog featuring ESTÜ branding, category chips, capacity progress bars, and search. | **Interactive Dialog:** Confirmation modal popup before joining an event with venue and date details. |
 
-2. **Event Details Screen:**
-   ![Details Screen](screenshots/details_screen.png)
+| 3. Favorites Collection (6 Items) | 4. Event Sorting Bottom Sheet |
+| :---: | :---: |
+| <img src="screenshots/assignment1_03_favorites_collection.png" width="360" alt="Favorites Screen" /> | <img src="screenshots/assignment1_04_sort_bottom_sheet.png" width="360" alt="Sort Bottom Sheet" /> |
+| **Favorites Hub:** 6 saved events with real-time bottom navigation badge counter ('6') and match indicator. | **Sorting Modal:** Bottom sheet offering sorting by Upcoming Date, Alphabetical (A-Z), and Availability. |
 
-3. **Favorites Screen:**
-   ![Favorites Screen](screenshots/favorites_screen.png)
-
-4. **My Events Screen:**
-   ![My Events Screen](screenshots/my_events_screen.png)
+| 5. Live Search Query (Dark Mode) | 6. My Events — Sports (Dark Mode) |
+| :---: | :---: |
+| <img src="screenshots/assignment1_05_search_dark_mode.png" width="360" alt="Dark Mode Search" /> | <img src="screenshots/assignment1_06_my_events_sports_dark.png" width="360" alt="My Events Sports" /> |
+| **Dark Mode Search:** Querying `"game"` in Obsidian Dark Mode displaying Unreal Engine Bootcamp and filter reset pill. | **Registered Hub:** Sports category filter active displaying 4 registered events with active bottom badge ('4'). |

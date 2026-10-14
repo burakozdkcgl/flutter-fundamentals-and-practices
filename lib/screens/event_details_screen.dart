@@ -25,6 +25,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   void initState() {
     super.initState();
     _event = widget.event;
+    try {
+      if (Uri.base.queryParameters['dialog'] == 'confirm') {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _handleJoinEvent();
+          }
+        });
+      }
+    } catch (_) {}
   }
 
   void _toggleFavorite() {

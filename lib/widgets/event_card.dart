@@ -165,6 +165,7 @@ class EventCard extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.45),
                       shape: const CircleBorder(),
                       child: InkWell(
+                        key: Key('favorite-btn-${event.id}'),
                         customBorder: const CircleBorder(),
                         onTap: onFavoriteToggle,
                         child: Padding(
@@ -362,18 +363,19 @@ class EventCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: availabilityBg,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: availabilityColor.withValues(alpha: 0.35),
-                              width: 0.8,
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: availabilityBg,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: availabilityColor.withValues(alpha: 0.35),
+                                width: 0.8,
+                              ),
                             ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
                                 availabilityIcon,
@@ -381,20 +383,27 @@ class EventCard extends StatelessWidget {
                                 color: availabilityColor,
                               ),
                               const SizedBox(width: 5),
-                              Text(
-                                availabilityText,
-                                style: TextStyle(
-                                  color: availabilityColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Text(
+                                  availabilityText,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: availabilityColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+                      ),
 
-                        // Action pill
-                        Row(
+                      const SizedBox(width: 8),
+
+                      // Action pill
+                      Row(
                           children: [
                             Text(
                               'View Details',
