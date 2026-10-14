@@ -84,6 +84,8 @@ app.*.map.json
 **/linux/flutter/ephemeral/
 **/windows/flutter/ephemeral/
 **/windows/flutter/ephemeral/**
+**/windows/flutter/generated_plugin_registrant.*
+**/windows/flutter/generated_plugins.cmake
 
 # Exceptions
 !**/ios/**/default.mode1v3
