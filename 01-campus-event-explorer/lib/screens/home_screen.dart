@@ -201,7 +201,11 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-    );
+    ).then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   void _showEstuInfoDialog() {

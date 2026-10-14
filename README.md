@@ -34,7 +34,7 @@ Tools • Dart 3.13.5 • DevTools 2.60.0
 1. Clone the repository or extract the project archive:
    ```bash
    git clone <repository_url>
-   cd flutter-campus-events-app
+   cd flutter-campus-events-app/01-campus-event-explorer
    ```
 2. Get project dependencies:
    ```bash
@@ -130,15 +130,15 @@ The application features a responsive design supporting both ESTÜ Light Theme a
 
 | 1. Explore Screen (Light Mode) | 2. Confirm Participation Dialog |
 | :---: | :---: |
-| <img src="screenshots/assignment1_01_explore_overview.png" width="360" alt="Explore Screen" /> | <img src="screenshots/assignment1_02_event_details_dialog.png" width="360" alt="Confirm Dialog" /> |
+| <img src="docs/screenshots/assignment1_01_explore_overview.png" width="360" alt="Explore Screen" /> | <img src="docs/screenshots/assignment1_02_event_details_dialog.png" width="360" alt="Confirm Dialog" /> |
 | **Explore Screen:** Event catalog featuring ESTÜ branding, category chips, capacity progress bars, and search. | **Interactive Dialog:** Confirmation modal popup before joining an event with venue and date details. |
 
 | 3. Favorites Collection (6 Items) | 4. Event Sorting Bottom Sheet |
 | :---: | :---: |
-| <img src="screenshots/assignment1_03_favorites_collection.png" width="360" alt="Favorites Screen" /> | <img src="screenshots/assignment1_04_sort_bottom_sheet.png" width="360" alt="Sort Bottom Sheet" /> |
+| <img src="docs/screenshots/assignment1_03_favorites_collection.png" width="360" alt="Favorites Screen" /> | <img src="docs/screenshots/assignment1_04_sort_bottom_sheet.png" width="360" alt="Sort Bottom Sheet" /> |
 | **Favorites Hub:** 6 saved events with real-time bottom navigation badge counter ('6') and match indicator. | **Sorting Modal:** Bottom sheet offering sorting by Upcoming Date, Alphabetical (A-Z), and Availability. |
 
 | 5. Live Search Query (Dark Mode) | 6. My Events — Sports (Dark Mode) |
 | :---: | :---: |
-| <img src="screenshots/assignment1_05_search_dark_mode.png" width="360" alt="Dark Mode Search" /> | <img src="screenshots/assignment1_06_my_events_sports_dark.png" width="360" alt="My Events Sports" /> |
+| <img src="docs/screenshots/assignment1_05_search_dark_mode.png" width="360" alt="Dark Mode Search" /> | <img src="docs/screenshots/assignment1_06_my_events_sports_dark.png" width="360" alt="My Events Sports" /> |
 | **Dark Mode Search:** Querying `"game"` in Obsidian Dark Mode displaying Unreal Engine Bootcamp and filter reset pill. | **Registered Hub:** Sports category filter active displaying 4 registered events with active bottom badge ('4'). |

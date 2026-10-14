@@ -521,41 +521,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     runSpacing: 8,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      // ESTÜ Campus Verified Badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: AppTheme.estuBurgundy.withValues(alpha: 0.35),
-                            width: 0.8,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ClipOval(
-                              child: Image.asset(
-                                'assets/images/estu_logo.png',
-                                width: 16,
-                                height: 16,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              'ESTÜ',
-                              style: TextStyle(
-                                color: AppTheme.estuBurgundy,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
                       // Category Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
