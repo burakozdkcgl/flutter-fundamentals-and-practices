@@ -90,3 +90,23 @@ app.*.map.json
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
+
+# LaTeX build outputs and report PDF
+docs/report-source-codes/*.pdf
+docs/report-source-codes/*.aux
+docs/report-source-codes/*.log
+docs/report-source-codes/*.out
+docs/report-source-codes/*.toc
+docs/report-source-codes/*.synctex.gz
+docs/report-source-codes/*.fls
+docs/report-source-codes/*.fdb_latexmk
+docs/report-source-codes/*.bbl
+docs/report-source-codes/*.blg
+docs/report-source-codes/*.xdv
+docs/report-source-codes/*.run.xml
+docs/report-source-codes/*-blx.bib
+
+# Private student information (local only, do not commit)
+docs/report-source-codes/student-infom.tex
+student-infom.tex
+
