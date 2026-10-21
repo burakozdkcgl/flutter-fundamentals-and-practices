@@ -4,6 +4,9 @@ simple mobile app
 works completely offline with mock data    
 in-memory only, no backend or database
 
+# IMPORTANT NOTE
+> ********For privacy and security reasons, personal/student information is not stored in this public repository. All required student and submission details are provided in the submitted assignment PDF report.
+
 
 | | | |
 | :---: | :---: | :---: |
